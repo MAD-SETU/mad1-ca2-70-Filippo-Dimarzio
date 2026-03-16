@@ -32,6 +32,7 @@ class RecyclingTrackerFileStore(val context: Context) : RecyclingTrackerStore {
             found.title = recyclingTracker.title
             found.description = recyclingTracker.description
             found.date = recyclingTracker.date
+            found.image = recyclingTracker.image
             serialize()
         }
     }

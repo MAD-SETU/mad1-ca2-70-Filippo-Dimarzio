@@ -77,6 +77,31 @@
                 android:textSize="14sp" />
 
             <Button
+                android:id="@+id/chooseImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:backgroundTint="@color/colorAccent"
+                android:text="@string/button_addImage"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:id="@+id/recyclingTrackerImage"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:layout_margin="8dp"
+                app:srcCompat="@drawable/ic_launcher_background" />
+
+            <Button
+                android:id="@+id/recyclingTrackerLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:backgroundTint="@color/colorAccent"
+                android:text="@string/button_location"
+                android:textColor="@color/white" />
+
+            <Button
                 android:id="@+id/btnAdd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

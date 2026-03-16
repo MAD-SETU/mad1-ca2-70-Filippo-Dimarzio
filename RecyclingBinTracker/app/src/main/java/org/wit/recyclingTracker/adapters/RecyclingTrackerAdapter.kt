@@ -3,6 +3,7 @@ package org.wit.recyclingTracker.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import org.wit.recyclingTracker.databinding.CardRecyclingTrackerBinding
 import org.wit.recyclingTracker.models.RecyclingTrackerModel
 
@@ -35,6 +36,7 @@ class RecyclingTrackerAdapter(private var recyclingTrackers: List<RecyclingTrack
             binding.recyclingTrackerTitle.text = recyclingTracker.title
             binding.description.text = recyclingTracker.description
             binding.dateAdded.text = recyclingTracker.date
+            Picasso.get().load(recyclingTracker.image).resize(200,200).into(binding.recyclingTrackerImage)
             binding.root.setOnClickListener { listener.onRecyclingTrackerClick(recyclingTracker) }
         }
     }

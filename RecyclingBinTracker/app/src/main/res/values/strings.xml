@@ -9,4 +9,12 @@
     <string name="menu_delete">Delete</string>
     <string name="enter_recyclingTracker_title">Please enter a Recycling Bin title</string>
     <string name="save_recyclingTracker">Save</string>
+    <string name="button_addImage"> Add Recycling Bin Image </string>
+    <string name="select_placemark_image">Select Recycling Bin image</string>
+    <string name="change_placemark_image">Change Recycling Bin  image</string>
+    <string name="select_recyclingTracker_image"> Select Recycling Bin image </string>
+    <string name="change_recyclingTracker_image">Change Recycling Bin image </string>
+    <string name="button_location"> Set Recycling Bin Location</string>
+    <string name="title_activity_recycling_tracker_maps">RecyclingTrackerMapsActivity</string>
+    <string name="title_activity_map"> Recycling Bin Map Activity</string>
 </resources>
