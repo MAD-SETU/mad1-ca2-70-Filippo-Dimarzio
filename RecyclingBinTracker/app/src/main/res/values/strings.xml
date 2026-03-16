@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Recycling Tracker App</string>
+    <string name="button_addRecyclingTracker">Add Recycling Bin</string>
+    <string name="hint_recyclingTrackerTitle">Recycling Bin Title</string>
+    <string name="hint_recyclingTrackerDescription">Description</string>
+    <string name="hint_recyclingTrackerDate">Date Added</string>
+    <string name="menu_addRecyclingTracker">Add</string>
+    <string name="menu_cancel">Back</string>
+    <string name="menu_delete">Delete</string>
+    <string name="enter_recyclingTracker_title">Please enter a Recycling Bin title</string>
+    <string name="save_recyclingTracker">Save</string>
+</resources>
