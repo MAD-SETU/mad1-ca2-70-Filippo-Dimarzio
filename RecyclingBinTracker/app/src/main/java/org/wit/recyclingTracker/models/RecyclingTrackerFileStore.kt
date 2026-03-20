@@ -1,19 +1,41 @@
 package org.wit.recyclingTracker.models
 
 import android.content.Context
+import android.net.Uri
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
 import com.google.gson.reflect.TypeToken
-import java.io.File
+import org.wit.recyclingTracker.helpers.exists
+import org.wit.recyclingTracker.helpers.read
+import org.wit.recyclingTracker.helpers.write
+import timber.log.Timber
+import java.lang.reflect.Type
 import java.util.*
+
+const val JSON_FILE = "recyclingTrackers.json"
+val gsonBuilder: Gson = GsonBuilder().setPrettyPrinting()
+                        .registerTypeAdapter(Uri::class.java, UriParser())
+                        .create()
+val listType: Type = object : TypeToken<ArrayList<RecyclingTrackerModel>>() {}.type
+
+fun generateRandomId(): Long {
+    return Random().nextLong()
+}
 
 class RecyclingTrackerFileStore(val context: Context) : RecyclingTrackerStore {
 
-    private var recyclingTrackers = mutableListOf<RecyclingTrackerModel>()
-    private val fileName = "recyclingTrackers.json"
-    private val gson = Gson()
+    var recyclingTrackers = mutableListOf<RecyclingTrackerModel>()
 
     init {
-        load()
+        if (exists(context, JSON_FILE)) {
+            deserialize()
+        }
     }
 
     override fun findAll(): List<RecyclingTrackerModel> {
@@ -21,7 +43,7 @@ class RecyclingTrackerFileStore(val context: Context) : RecyclingTrackerStore {
     }
 
     override fun create(recyclingTracker: RecyclingTrackerModel) {
-        recyclingTracker.id = Random().nextLong()
+        recyclingTracker.id = generateRandomId()
         recyclingTrackers.add(recyclingTracker)
         serialize()
     }
@@ -33,6 +55,10 @@ class RecyclingTrackerFileStore(val context: Context) : RecyclingTrackerStore {
             found.description = recyclingTracker.description
             found.date = recyclingTracker.date
             found.image = recyclingTracker.image
+            found.lat = recyclingTracker.lat
+            found.lng = recyclingTracker.lng
+            found.zoom = recyclingTracker.zoom
+            logAll()
             serialize()
         }
     }
@@ -46,16 +72,34 @@ class RecyclingTrackerFileStore(val context: Context) : RecyclingTrackerStore {
     }
 
     private fun serialize() {
-        val jsonString = gson.toJson(recyclingTrackers)
-        File(context.filesDir, fileName).writeText(jsonString)
+        val jsonString = gsonBuilder.toJson(recyclingTrackers, listType)
+        write(context, JSON_FILE, jsonString)
     }
 
-    private fun load() {
-        val file = File(context.filesDir, fileName)
-        if (file.exists()) {
-            val jsonString = file.readText()
-            val type = object : TypeToken<MutableList<RecyclingTrackerModel>>() {}.type
-            recyclingTrackers = gson.fromJson(jsonString, type)
-        }
+    private fun deserialize() {
+        val jsonString = read(context, JSON_FILE)
+        recyclingTrackers = gsonBuilder.fromJson(jsonString, listType)
+    }
+
+    private fun logAll() {
+        recyclingTrackers.forEach { Timber.i("$it") }
+    }
+}
+
+class UriParser : JsonDeserializer<Uri>, JsonSerializer<Uri> {
+    override fun deserialize(
+        json: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): Uri {
+        return Uri.parse(json?.asString)
+    }
+
+    override fun serialize(
+        src: Uri?,
+        typeOfSrc: Type?,
+        context: JsonSerializationContext?
+    ): JsonElement {
+        return JsonPrimitive(src.toString())
     }
 }

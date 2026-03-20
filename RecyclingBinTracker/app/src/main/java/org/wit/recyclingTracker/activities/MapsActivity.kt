@@ -17,7 +17,11 @@ import org.wit.recyclingTracker.databinding.ActivityRecyclingTrackerMapsBinding
 import org.wit.recyclingTracker.models.Location
 import androidx.activity.addCallback
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerDragListener {
+class MapsActivity : AppCompatActivity(),
+    OnMapReadyCallback,
+    GoogleMap.OnMarkerDragListener,
+    GoogleMap.OnMapClickListener,
+    GoogleMap.OnMarkerClickListener {
 
     private lateinit var map: GoogleMap
     private lateinit var binding: ActivityRecyclingTrackerMapsBinding
@@ -35,7 +39,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        onBackPressedDispatcher.addCallback(this){
+        onBackPressedDispatcher.addCallback(this) {
             val resultIntent = Intent()
             resultIntent.putExtra("location", location)
             setResult(Activity.RESULT_OK, resultIntent)
@@ -54,6 +58,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         map.addMarker(MarkerOptions().position(loc).title("Marker in Waterford"))
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 16f))
         map.setOnMarkerDragListener(this)
+        map.setOnMapClickListener(this)
+        map.setOnMarkerClickListener(this)
+
     }
 
     override fun onMarkerDrag(p0: Marker) {
@@ -68,4 +75,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     override fun onMarkerDragStart(p0: Marker) {
     }
+
+    override fun onMarkerClick(marker: Marker): Boolean {
+        val loc = LatLng(location.lat, location.lng)
+        marker.snippet = "GPS : $loc"
+        return false
+    }
+
+    override fun onMapClick(p0: LatLng) {
+
+    }
+
+
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import org.wit.recyclingTracker.models.RecyclingTrackerFileStore
 import org.wit.recyclingTracker.models.RecyclingTrackerStore
 import timber.log.Timber
+import timber.log.Timber.Forest.i
 
 class MainApp : Application(){
 
@@ -13,6 +14,6 @@ class MainApp : Application(){
         super.onCreate()
         Timber.plant(Timber.DebugTree())
         recyclingTrackers = RecyclingTrackerFileStore(applicationContext)
-        Timber.i("Recycling Tracker Application Started")
+        i("Recycling Tracker Application Started")
     }
 }

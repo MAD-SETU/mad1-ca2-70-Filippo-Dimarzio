@@ -8,12 +8,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import org.wit.recyclingTracker.R
 import org.wit.recyclingTracker.databinding.ActivityRecyclingTrackerBinding
-import org.wit.recyclingTracker.helpers.showImagePicker
 import org.wit.recyclingTracker.main.MainApp
 import org.wit.recyclingTracker.models.Location
 import org.wit.recyclingTracker.models.RecyclingTrackerModel
@@ -24,11 +24,9 @@ class RecyclingTrackerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRecyclingTrackerBinding
     var recyclingTracker = RecyclingTrackerModel()
     lateinit var app: MainApp
-    private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
-    val IMAGE_REQUEST = 1
-    private lateinit var mapIntentLauncher: ActivityResultLauncher<Intent>
 
-    var location = Location(52.245696, -7.139102, 15f)
+    private lateinit var imageIntentLauncher : ActivityResultLauncher<PickVisualMediaRequest>
+    private lateinit var mapIntentLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,16 +52,12 @@ class RecyclingTrackerActivity : AppCompatActivity() {
             binding.btnAdd.setText(R.string.save_recyclingTracker)
             binding.btnDelete.visibility = View.VISIBLE
             
-
-            location = Location(recyclingTracker.lat, recyclingTracker.lng, recyclingTracker.zoom)
-            
             Picasso.get()
                 .load(recyclingTracker.image)
                 .into(binding.recyclingTrackerImage)
             if (recyclingTracker.image != Uri.EMPTY) {
                 binding.chooseImage.setText(R.string.change_recyclingTracker_image)
             }
-
         }
 
         binding.btnAdd.setOnClickListener {
@@ -95,11 +89,19 @@ class RecyclingTrackerActivity : AppCompatActivity() {
         }
 
         binding.chooseImage.setOnClickListener {
-            showImagePicker(imageIntentLauncher)
+            val request = PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                .build()
+            imageIntentLauncher.launch(request)
         }
 
         binding.recyclingTrackerLocation.setOnClickListener {
-
+            val location = Location(52.245696, -7.139102, 15f)
+            if(recyclingTracker.zoom != 0f){
+                location.lat = recyclingTracker.lat
+                location.lng = recyclingTracker.lng
+                location.zoom = recyclingTracker.zoom
+            }
             val launcherIntent = Intent(this, MapsActivity::class.java)
                 .putExtra("location", location)
             mapIntentLauncher.launch(launcherIntent)
@@ -124,25 +126,26 @@ class RecyclingTrackerActivity : AppCompatActivity() {
     }
 
     private fun registerImagePickerCallback() {
-        imageIntentLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { result ->
-                when (result.resultCode) {
-                    RESULT_OK -> {
-                        if (result.data != null) {
-                            i("Got Result ${result.data!!.data}")
-                            recyclingTracker.image = result.data!!.data!!
-                            Picasso.get()
-                                .load(recyclingTracker.image)
-                                .into(binding.recyclingTrackerImage)
-                            binding.chooseImage.setText(R.string.change_recyclingTracker_image)
-                        }
-                    }
-
-                    RESULT_CANCELED -> {}
-                    else -> {}
+        imageIntentLauncher = registerForActivityResult(
+            ActivityResultContracts.PickVisualMedia()
+        ) { uri ->
+            if (uri != null) {
+                try {
+                    contentResolver.takePersistableUriPermission(
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                    recyclingTracker.image = uri
+                    i("IMG :: ${recyclingTracker.image}")
+                    Picasso.get()
+                        .load(recyclingTracker.image)
+                        .into(binding.recyclingTrackerImage)
+                    binding.chooseImage.setText(R.string.change_recyclingTracker_image)
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
+        }
     }
 
     private fun registerMapCallback() {
@@ -152,16 +155,16 @@ class RecyclingTrackerActivity : AppCompatActivity() {
                 when (result.resultCode) {
                     RESULT_OK -> {
                         if (result.data != null) {
-                            i("Got Location ${result.data!!.toString()}")
-                            val returnedLocation = result.data!!.extras?.getParcelable<Location>("location")!!
-                            i("Location == $returnedLocation")
-                            location = returnedLocation
-                            recyclingTracker.lat = returnedLocation.lat
-                            recyclingTracker.lng = returnedLocation.lng
-                            recyclingTracker.zoom = returnedLocation.zoom
+                            i("Got Location ${result.data.toString()}")
+                            val location = result.data!!.extras?.getParcelable<Location>("location")!!
+                            i("Location == $location")
+                            recyclingTracker.lat = location.lat
+                            recyclingTracker.lng = location.lng
+                            recyclingTracker.zoom = location.zoom
                         }
                     }
-                    RESULT_CANCELED -> { } else -> { }
+                    RESULT_CANCELED -> { }
+                    else -> { }
                 }
             }
     }
