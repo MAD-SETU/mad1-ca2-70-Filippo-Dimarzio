@@ -9,7 +9,7 @@ import org.wit.recyclingTracker.models.RecyclingTrackerModel
 
 
 interface RecyclingTrackerListener{
-    fun onRecyclingTrackerClick(recycling: RecyclingTrackerModel)
+    fun onRecyclingTrackerClick(recycling: RecyclingTrackerModel, position: Int)
 }
 class RecyclingTrackerAdapter(private var recyclingTrackers: List<RecyclingTrackerModel>,
                               private val listener: RecyclingTrackerListener) :
@@ -37,7 +37,7 @@ class RecyclingTrackerAdapter(private var recyclingTrackers: List<RecyclingTrack
             binding.description.text = recyclingTracker.description
             binding.dateAdded.text = recyclingTracker.date
             Picasso.get().load(recyclingTracker.image).resize(200,200).into(binding.recyclingTrackerImage)
-            binding.root.setOnClickListener { listener.onRecyclingTrackerClick(recyclingTracker) }
+            binding.root.setOnClickListener { listener.onRecyclingTrackerClick(recyclingTracker, adapterPosition) }
         }
     }
 }

@@ -28,10 +28,12 @@ class RecyclingTrackerActivity : AppCompatActivity() {
     private lateinit var imageIntentLauncher : ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var mapIntentLauncher: ActivityResultLauncher<Intent>
 
+    var edit = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var edit = false
+       //  edit = true
 
         binding = ActivityRecyclingTrackerBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -102,7 +104,7 @@ class RecyclingTrackerActivity : AppCompatActivity() {
                 location.lng = recyclingTracker.lng
                 location.zoom = recyclingTracker.zoom
             }
-            val launcherIntent = Intent(this, MapsActivity::class.java)
+            val launcherIntent = Intent(this, MapActivity::class.java)
                 .putExtra("location", location)
             mapIntentLauncher.launch(launcherIntent)
         }
@@ -113,17 +115,24 @@ class RecyclingTrackerActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_recycling_tracker, menu)
+        if (edit) menu.getItem(0).isVisible = true
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.item_delete -> {
+                app.recyclingTrackers.delete(recyclingTracker)
+                finish()
+            }
+
             R.id.item_cancel -> {
                 finish()
             }
         }
-        return super.onOptionsItemSelected(item)
-    }
+            return super.onOptionsItemSelected(item)
+        }
+
 
     private fun registerImagePickerCallback() {
         imageIntentLauncher = registerForActivityResult(

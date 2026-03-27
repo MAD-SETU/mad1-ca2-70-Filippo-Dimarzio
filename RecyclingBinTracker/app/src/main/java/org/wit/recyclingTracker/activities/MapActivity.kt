@@ -17,7 +17,7 @@ import org.wit.recyclingTracker.databinding.ActivityRecyclingTrackerMapsBinding
 import org.wit.recyclingTracker.models.Location
 import androidx.activity.addCallback
 
-class MapsActivity : AppCompatActivity(),
+class MapActivity : AppCompatActivity(),
     OnMapReadyCallback,
     GoogleMap.OnMarkerDragListener,
     GoogleMap.OnMapClickListener,

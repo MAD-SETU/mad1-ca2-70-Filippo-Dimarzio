@@ -14,6 +14,7 @@ class MainApp : Application(){
         super.onCreate()
         Timber.plant(Timber.DebugTree())
         recyclingTrackers = RecyclingTrackerFileStore(applicationContext)
+        //recyclingTrackers = RecyclingTrackerMemStore()
         i("Recycling Tracker Application Started")
     }
 }
