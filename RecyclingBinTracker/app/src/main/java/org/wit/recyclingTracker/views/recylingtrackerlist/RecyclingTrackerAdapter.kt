@@ -1,4 +1,4 @@
-package org.wit.recyclingTracker.adapters
+package org.wit.recyclingTracker.views.recylingtrackerlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

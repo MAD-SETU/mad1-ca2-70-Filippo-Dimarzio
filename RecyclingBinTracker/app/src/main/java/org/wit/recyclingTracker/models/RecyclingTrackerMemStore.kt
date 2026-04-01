@@ -28,7 +28,8 @@ class RecyclingTrackerMemStore : RecyclingTrackerStore {
     }
 
     override fun update(recyclingTracker: RecyclingTrackerModel) {
-        val foundRecyclingTracker: RecyclingTrackerModel? = recyclingTrackers.find { p -> p.id == recyclingTracker.id }
+        val foundRecyclingTracker: RecyclingTrackerModel? =
+            recyclingTrackers.find { p -> p.id == recyclingTracker.id }
         if (foundRecyclingTracker != null) {
             foundRecyclingTracker.title = recyclingTracker.title
             foundRecyclingTracker.description = recyclingTracker.description
@@ -46,5 +47,9 @@ class RecyclingTrackerMemStore : RecyclingTrackerStore {
 
     private fun logAll() {
         recyclingTrackers.forEach { i("$it") }
+    }
+
+    override fun findById(id: Long): RecyclingTrackerModel? {
+        return recyclingTrackers.find { it.id == id }
     }
 }

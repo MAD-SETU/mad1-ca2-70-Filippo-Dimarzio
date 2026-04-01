@@ -17,6 +17,7 @@ import org.wit.recyclingTracker.helpers.write
 import timber.log.Timber
 import java.lang.reflect.Type
 import java.util.*
+import kotlin.math.log
 
 const val JSON_FILE = "recyclingTrackers.json"
 val gsonBuilder: Gson = GsonBuilder().setPrettyPrinting()
@@ -42,6 +43,10 @@ class RecyclingTrackerFileStore(val context: Context) : RecyclingTrackerStore {
         return recyclingTrackers
     }
 
+    override fun findById(id: Long): RecyclingTrackerModel? {
+        return recyclingTrackers.find { it.id == id }
+    }
+
     override fun create(recyclingTracker: RecyclingTrackerModel) {
         recyclingTracker.id = generateRandomId()
         recyclingTrackers.add(recyclingTracker)
@@ -49,6 +54,7 @@ class RecyclingTrackerFileStore(val context: Context) : RecyclingTrackerStore {
     }
 
     override fun update(recyclingTracker: RecyclingTrackerModel) {
+        val recyclingTrackersList = findAll() as ArrayList<RecyclingTrackerModel>
         val found = recyclingTrackers.find { it.id == recyclingTracker.id }
         if (found != null) {
             found.title = recyclingTracker.title
@@ -59,8 +65,8 @@ class RecyclingTrackerFileStore(val context: Context) : RecyclingTrackerStore {
             found.lng = recyclingTracker.lng
             found.zoom = recyclingTracker.zoom
             logAll()
-            serialize()
         }
+        serialize()
     }
 
     override fun delete(recyclingTracker: RecyclingTrackerModel) {
