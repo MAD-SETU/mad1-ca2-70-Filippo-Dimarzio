@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.RecyclingTrackerActivity">
+    tools:context=".views.recyclingtracker.RecyclingTrackerView">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -43,6 +43,7 @@
                 android:layout_margin="8dp"
                 android:hint="@string/hint_recyclingTrackerTitle"
                 android:inputType="text"
+                android:autofillHints="name"
                 android:maxLength="25"
                 android:maxLines="1"
                 android:minHeight="48dp"
@@ -57,6 +58,7 @@
                 android:layout_margin="8dp"
                 android:hint="@string/hint_recyclingTrackerDescription"
                 android:inputType="text"
+                android:autofillHints="description"
                 android:maxLength="25"
                 android:maxLines="1"
                 android:minHeight="48dp"
@@ -71,6 +73,7 @@
                 android:layout_margin="8dp"
                 android:hint="@string/hint_recyclingTrackerDate"
                 android:inputType="date"
+                android:autofillHints="date"
                 android:minHeight="48dp"
                 android:padding="8dp"
                 android:textColor="@color/colorPrimaryDark"
@@ -90,6 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
                 android:layout_margin="8dp"
+                android:contentDescription="@string/select_recyclingTracker_image"
                 app:srcCompat="@drawable/ic_launcher_background" />
 
             <Button
