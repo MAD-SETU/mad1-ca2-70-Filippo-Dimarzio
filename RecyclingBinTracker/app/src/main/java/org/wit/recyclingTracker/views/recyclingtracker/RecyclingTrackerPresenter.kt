@@ -30,9 +30,11 @@ class RecyclingTrackerPresenter(val view: RecyclingTrackerView) {
         registerMapCallback()
     }
 
-    fun doAddOrSave(title: String, description: String) {
+    fun doAddOrSave(title: String, description: String, company: String, date: String) {
         recyclingTracker.title = title
         recyclingTracker.description = description
+        recyclingTracker.company = company
+        recyclingTracker.date = date
         if (edit) {
             app.recyclingTrackers.update(recyclingTracker.copy())
         } else {
@@ -71,9 +73,11 @@ class RecyclingTrackerPresenter(val view: RecyclingTrackerView) {
         mapIntentLauncher.launch(launcherIntent)
     }
 
-    fun cacheRecyclingTracker (title: String, description: String) {
+    fun cacheRecyclingTracker (title: String, description: String, company: String, date: String) {
         recyclingTracker.title = title
         recyclingTracker.description = description
+        recyclingTracker.company = company
+        recyclingTracker.date = date
     }
 
     private fun registerImagePickerCallback() {

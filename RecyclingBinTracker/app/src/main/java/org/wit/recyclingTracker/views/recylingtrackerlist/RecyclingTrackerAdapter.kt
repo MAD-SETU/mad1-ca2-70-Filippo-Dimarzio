@@ -35,6 +35,7 @@ class RecyclingTrackerAdapter(private var recyclingTrackers: List<RecyclingTrack
         fun bind(recyclingTracker: RecyclingTrackerModel, listener: RecyclingTrackerListener) {
             binding.recyclingTrackerTitle.text = recyclingTracker.title
             binding.description.text = recyclingTracker.description
+            binding.company.text = recyclingTracker.company
             binding.dateAdded.text = recyclingTracker.date
             Picasso.get().load(recyclingTracker.image).resize(200,200).into(binding.recyclingTrackerImage)
             binding.root.setOnClickListener { listener.onRecyclingTrackerClick(recyclingTracker, adapterPosition) }

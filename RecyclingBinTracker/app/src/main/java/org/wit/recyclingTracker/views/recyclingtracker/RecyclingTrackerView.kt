@@ -29,13 +29,29 @@ class RecyclingTrackerView : AppCompatActivity() {
 
         presenter = RecyclingTrackerPresenter(this)
 
+        if (!presenter.edit) {
+            Picasso.get()
+                .load(R.drawable.recycling_map_logo)
+                .into(binding.recyclingTrackerImage)
+        }
+
         binding.chooseImage.setOnClickListener {
-            presenter.cacheRecyclingTracker(binding.recyclingTrackerTitle.text.toString(), binding.description.text.toString())
+            presenter.cacheRecyclingTracker(
+                binding.recyclingTrackerTitle.text.toString(),
+                binding.description.text.toString(),
+                binding.company.text.toString(),
+                binding.dateAdded.text.toString()
+            )
             presenter.doSelectImage()
         }
 
         binding.recyclingTrackerLocation.setOnClickListener {
-            presenter.cacheRecyclingTracker(binding.recyclingTrackerTitle.text.toString(), binding.description.text.toString())
+            presenter.cacheRecyclingTracker(
+                binding.recyclingTrackerTitle.text.toString(),
+                binding.description.text.toString(),
+                binding.company.text.toString(),
+                binding.dateAdded.text.toString()
+            )
             presenter.doSetLocation()
         }
 
@@ -44,7 +60,12 @@ class RecyclingTrackerView : AppCompatActivity() {
                 Snackbar.make(binding.root, R.string.enter_recyclingTracker_title, Snackbar.LENGTH_LONG)
                     .show()
             } else {
-                presenter.doAddOrSave(binding.recyclingTrackerTitle.text.toString(), binding.description.text.toString())
+                presenter.doAddOrSave(
+                    binding.recyclingTrackerTitle.text.toString(),
+                    binding.description.text.toString(),
+                    binding.company.text.toString(),
+                    binding.dateAdded.text.toString()
+                )
             }
         }
     }
@@ -71,14 +92,20 @@ class RecyclingTrackerView : AppCompatActivity() {
     fun showRecyclingTracker(recyclingTracker: RecyclingTrackerModel) {
         binding.recyclingTrackerTitle.setText(recyclingTracker.title)
         binding.description.setText(recyclingTracker.description)
+        binding.company.setText(recyclingTracker.company)
+        binding.dateAdded.setText(recyclingTracker.date)
         binding.btnAdd.setText(R.string.save_recyclingTracker)
-        Picasso.get()
-            .load(recyclingTracker.image)
-            .into(binding.recyclingTrackerImage)
+        
         if (recyclingTracker.image != Uri.EMPTY) {
+            Picasso.get()
+                .load(recyclingTracker.image)
+                .into(binding.recyclingTrackerImage)
             binding.chooseImage.setText(R.string.change_recyclingTracker_image)
+        } else {
+            Picasso.get()
+                .load(R.drawable.recycling_map_logo)
+                .into(binding.recyclingTrackerImage)
         }
-
     }
 
     fun updateImage(image: Uri){

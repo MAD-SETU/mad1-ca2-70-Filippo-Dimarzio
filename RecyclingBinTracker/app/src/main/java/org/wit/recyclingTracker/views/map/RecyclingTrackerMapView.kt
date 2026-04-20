@@ -1,10 +1,13 @@
 package org.wit.recyclingTracker.views.map
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import com.squareup.picasso.Picasso
+import org.wit.recyclingTracker.R
 import org.wit.recyclingTracker.databinding.ActivityRecyclingTrackerMapsBinding
 import org.wit.recyclingTracker.databinding.ContentRecyclingTrackerMapsBinding
 import org.wit.recyclingTracker.main.MainApp
@@ -23,6 +26,7 @@ class RecyclingTrackerMapView : AppCompatActivity() , GoogleMap.OnMarkerClickLis
         binding = ActivityRecyclingTrackerMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         presenter = RecyclingTrackerMapPresenter(this)
 
@@ -36,13 +40,37 @@ class RecyclingTrackerMapView : AppCompatActivity() , GoogleMap.OnMarkerClickLis
     fun showRecyclingTracker(recyclingTracker: RecyclingTrackerModel) {
         contentBinding.currentTitle.text = recyclingTracker.title
         contentBinding.currentDescription.text = recyclingTracker.description
-        Picasso.get()
-            .load(recyclingTracker.image)
-            .into(contentBinding.currentImage)
+        contentBinding.currentCompany.text = recyclingTracker.company
+        if (recyclingTracker.image.toString().isNotEmpty()) {
+            Picasso.get()
+                .load(recyclingTracker.image)
+                .into(contentBinding.currentImage)
+        } else {
+            contentBinding.currentImage.setImageResource(R.drawable.recycling_map_logo)
+        }
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
         presenter.doMarkerSelected(marker)
+        return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_map, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_list -> {
+                presenter.doShowList()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
         return true
     }
 

@@ -59,6 +59,7 @@ class RecyclingTrackerFileStore(val context: Context) : RecyclingTrackerStore {
         if (found != null) {
             found.title = recyclingTracker.title
             found.description = recyclingTracker.description
+            found.company = recyclingTracker.company
             found.date = recyclingTracker.date
             found.image = recyclingTracker.image
             found.lat = recyclingTracker.lat

@@ -9,6 +9,7 @@ data class RecyclingTrackerModel(
     var id: Long = 0,
     var title: String = "",
     var description: String = "",
+    var company: String = "",
     var date: String = "",
     var image: Uri = Uri.EMPTY,
     var lat: Double = 0.0,
