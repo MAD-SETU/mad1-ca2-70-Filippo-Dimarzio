@@ -17,7 +17,6 @@ import org.wit.recyclingTracker.helpers.write
 import timber.log.Timber
 import java.lang.reflect.Type
 import java.util.*
-import kotlin.math.log
 
 const val JSON_FILE = "recyclingTrackers.json"
 val gsonBuilder: Gson = GsonBuilder().setPrettyPrinting()

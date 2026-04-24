@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">Recycling Tracker App</string>
     <string name="button_addRecyclingTracker">Add Recycling Bin</string>
-    <string name="hint_recyclingTrackerTitle">Recycling Bin Title</string>
+    <string name="hint_recyclingTrackerTitle">Title</string>
     <string name="hint_recyclingTrackerDescription">Description</string>
-    <string name="hint_recyclingTrackerDate">Date Added</string>
+    <string name="hint_recyclingTrackerDate">Date</string>
     <string name="menu_addRecyclingTracker">Add</string>
     <string name="menu_cancel">Back</string>
     <string name="menu_delete">Delete</string>
     <string name="enter_recyclingTracker_title">Please enter a Recycling Bin title</string>
     <string name="save_recyclingTracker">Save</string>
-    <string name="button_addImage"> Add Recycling Bin Image </string>
+    <string name="button_addImage">Select Image from Gallery</string>
     <string name="select_placemark_image">Select Recycling Bin image</string>
     <string name="change_placemark_image">Change Recycling Bin  image</string>
     <string name="select_recyclingTracker_image"> Select Recycling Bin image </string>
@@ -18,7 +18,7 @@
     <string name="title_activity_recycling_tracker_maps">Recycling Tracker Maps Activity</string>
     <string name="title_activity_map"> Recycling Bin Map Activity</string>
     <string name="menu_deleteRecyclingTracker"> Delete the Bin</string>
-    <!-- Strings used for fragments for navigation -->
+    
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
@@ -62,5 +62,13 @@
     </string>
     <string name="textview">TextView</string>
     <string name="menu_show_list">Show List</string>
-    <string name="hint_recyclingTrackerCompany">Which company do you recycle for?</string>
+    <string name="hint_recyclingTrackerCompany">Company</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="home">Home</string>
+    <string name="add_bin">Add Bin</string>
+    <string name="view_map">View Map</string>
+    <string name="account">Account</string>
+    <string name="logout">Logout</string>
+    <string name="email">Email</string>
 </resources>

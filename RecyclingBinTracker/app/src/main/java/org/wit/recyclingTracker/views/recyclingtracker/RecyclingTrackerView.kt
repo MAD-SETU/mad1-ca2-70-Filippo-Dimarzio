@@ -21,51 +21,36 @@ class RecyclingTrackerView : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         binding = ActivityRecyclingTrackerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        
         binding.toolbarAdd.title = title
         setSupportActionBar(binding.toolbarAdd)
 
         presenter = RecyclingTrackerPresenter(this)
 
         if (!presenter.edit) {
-            Picasso.get()
-                .load(R.drawable.recycling_map_logo)
-                .into(binding.recyclingTrackerImage)
+            Picasso.get().load(R.drawable.recycling_logo).into(binding.recyclingTrackerImage)
         }
 
         binding.chooseImage.setOnClickListener {
-            presenter.cacheRecyclingTracker(
-                binding.recyclingTrackerTitle.text.toString(),
-                binding.description.text.toString(),
-                binding.company.text.toString(),
-                binding.dateAdded.text.toString()
-            )
             presenter.doSelectImage()
         }
 
         binding.recyclingTrackerLocation.setOnClickListener {
-            presenter.cacheRecyclingTracker(
-                binding.recyclingTrackerTitle.text.toString(),
-                binding.description.text.toString(),
-                binding.company.text.toString(),
-                binding.dateAdded.text.toString()
-            )
             presenter.doSetLocation()
         }
 
         binding.btnAdd.setOnClickListener {
-            if (binding.recyclingTrackerTitle.text.toString().isEmpty()) {
-                Snackbar.make(binding.root, R.string.enter_recyclingTracker_title, Snackbar.LENGTH_LONG)
-                    .show()
+            val title = binding.recyclingTrackerTitle.text.toString()
+            val description = binding.description.text.toString()
+            val company = binding.company.text.toString()
+            val date = binding.dateAdded.text.toString()
+
+            if (title.isEmpty()) {
+                Snackbar.make(binding.root, R.string.enter_recyclingTracker_title, Snackbar.LENGTH_LONG).show()
             } else {
-                presenter.doAddOrSave(
-                    binding.recyclingTrackerTitle.text.toString(),
-                    binding.description.text.toString(),
-                    binding.company.text.toString(),
-                    binding.dateAdded.text.toString()
-                )
+                presenter.doAddOrSave(title, description, company, date)
             }
         }
     }
@@ -79,12 +64,8 @@ class RecyclingTrackerView : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.item_delete -> {
-                presenter.doDelete()
-            }
-            R.id.item_cancel -> {
-                presenter.doCancel()
-            }
+            R.id.item_delete -> presenter.doDelete()
+            R.id.item_cancel -> presenter.doCancel()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -94,26 +75,14 @@ class RecyclingTrackerView : AppCompatActivity() {
         binding.description.setText(recyclingTracker.description)
         binding.company.setText(recyclingTracker.company)
         binding.dateAdded.setText(recyclingTracker.date)
-        binding.btnAdd.setText(R.string.save_recyclingTracker)
         
         if (recyclingTracker.image != Uri.EMPTY) {
-            Picasso.get()
-                .load(recyclingTracker.image)
-                .into(binding.recyclingTrackerImage)
-            binding.chooseImage.setText(R.string.change_recyclingTracker_image)
-        } else {
-            Picasso.get()
-                .load(R.drawable.recycling_map_logo)
-                .into(binding.recyclingTrackerImage)
+            Picasso.get().load(recyclingTracker.image).into(binding.recyclingTrackerImage)
         }
+        binding.btnAdd.setText(R.string.save_recyclingTracker)
     }
 
-    fun updateImage(image: Uri){
-        Timber.i("Image updated")
-        Picasso.get()
-            .load(image)
-            .into(binding.recyclingTrackerImage)
-        binding.chooseImage.setText(R.string.change_recyclingTracker_image)
+    fun updateImage(image: Uri) {
+        Picasso.get().load(image).into(binding.recyclingTrackerImage)
     }
-
 }
