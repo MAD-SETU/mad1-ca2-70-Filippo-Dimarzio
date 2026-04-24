@@ -28,9 +28,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        android:fadeScrollbars="false"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
@@ -45,8 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 app:cardBackgroundColor="@color/colorAccent"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                app:cardCornerRadius="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -60,15 +56,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:hint="@string/hint_recyclingTrackerTitle"
-                        android:inputType="text"
-                        android:autofillHints="name"
-                        android:maxLength="25"
-                        android:maxLines="1"
-                        android:minHeight="48dp"
-                        android:padding="8dp"
                         android:textColor="@color/white"
-                        android:textColorHint="@color/white"
-                        android:textSize="14sp" />
+                        android:textColorHint="@color/white" />
 
                     <EditText
                         android:id="@+id/description"
@@ -76,15 +65,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:hint="@string/hint_recyclingTrackerDescription"
-                        android:inputType="text"
-                        android:autofillHints="description"
-                        android:maxLength="25"
-                        android:maxLines="1"
-                        android:minHeight="48dp"
-                        android:padding="8dp"
                         android:textColor="@color/white"
-                        android:textColorHint="@color/white"
-                        android:textSize="14sp" />
+                        android:textColorHint="@color/white" />
 
                     <EditText
                         android:id="@+id/company"
@@ -92,15 +74,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:hint="@string/hint_recyclingTrackerCompany"
-                        android:inputType="text"
-                        android:autofillHints="organizationName"
-                        android:maxLength="25"
-                        android:maxLines="1"
-                        android:minHeight="48dp"
-                        android:padding="8dp"
                         android:textColor="@color/white"
-                        android:textColorHint="@color/white"
-                        android:textSize="14sp" />
+                        android:textColorHint="@color/white" />
 
                     <EditText
                         android:id="@+id/dateAdded"
@@ -108,13 +83,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
                         android:hint="@string/hint_recyclingTrackerDate"
-                        android:inputType="date"
-                        android:autofillHints="date"
-                        android:minHeight="48dp"
-                        android:padding="8dp"
                         android:textColor="@color/white"
-                        android:textColorHint="@color/white"
-                        android:textSize="14sp" />
+                        android:textColorHint="@color/white" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -123,67 +93,30 @@
                 android:id="@+id/chooseImage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="@color/colorAccent"
-                android:text="@string/button_addImage"
-                android:textColor="@color/white" />
+                android:layout_margin="8dp"
+                android:text="@string/button_addImage" />
 
             <Button
                 android:id="@+id/recyclingTrackerLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="@color/colorAccent"
-                android:text="@string/button_location"
-                android:textColor="@color/white" />
+                android:layout_margin="8dp"
+                android:text="@string/button_location" />
 
             <Button
                 android:id="@+id/btnAdd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="@color/colorAccent"
-                android:text="@string/button_addRecyclingTracker"
-                android:textColor="@color/white" />
-
-            <Button
-                android:id="@+id/btnDelete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="@android:color/holo_red_dark"
-                android:text="@string/menu_delete"
-                android:textColor="@color/white"
-                android:visibility="gone" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                app:cardBackgroundColor="@color/colorAccent"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:text="@string/button_addRecyclingTracker" />
 
-                <ImageView
-                    android:id="@+id/recyclingTrackerImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:layout_margin="8dp"
-                    android:contentDescription="@string/select_recyclingTracker_image"
-                    app:srcCompat="@drawable/recycling_logo" />
-            </androidx.cardview.widget.CardView>
+            <ImageView
+                android:id="@+id/recyclingTrackerImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/recycling_logo" />
 
         </LinearLayout>
     </ScrollView>
