@@ -61,4 +61,6 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="textview">TextView</string>
+    <string name="menu_show_list">Show List</string>
+    <string name="hint_recyclingTrackerCompany">Which company do you recycle for?</string>
 </resources>

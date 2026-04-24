@@ -33,6 +33,8 @@ class RecyclingTrackerMemStore : RecyclingTrackerStore {
         if (foundRecyclingTracker != null) {
             foundRecyclingTracker.title = recyclingTracker.title
             foundRecyclingTracker.description = recyclingTracker.description
+            foundRecyclingTracker.company = recyclingTracker.company
+            foundRecyclingTracker.date = recyclingTracker.date
             foundRecyclingTracker.image = recyclingTracker.image
             foundRecyclingTracker.lat = recyclingTracker.lat
             foundRecyclingTracker.lng = recyclingTracker.lng

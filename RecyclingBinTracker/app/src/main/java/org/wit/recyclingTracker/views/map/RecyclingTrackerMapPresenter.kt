@@ -37,4 +37,8 @@ class RecyclingTrackerMapPresenter(val view: RecyclingTrackerMapView) {
             }
         }
     }
+
+    fun doShowList() {
+        view.finish()
+    }
 }
