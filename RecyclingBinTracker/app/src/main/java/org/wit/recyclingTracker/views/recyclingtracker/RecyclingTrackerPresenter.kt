@@ -1,32 +1,23 @@
 package org.wit.recyclingTracker.views.recyclingtracker
 
-import android.app.Activity
 import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import org.wit.recyclingTracker.main.MainApp
 import org.wit.recyclingTracker.models.Location
 import org.wit.recyclingTracker.models.RecyclingTrackerModel
-import org.wit.recyclingTracker.views.editLocation.EditLocationView
+import org.wit.recyclingTracker.views.BasePresenter
+import org.wit.recyclingTracker.views.BaseView
+import org.wit.recyclingTracker.views.VIEW
 
-class RecyclingTrackerPresenter(val view: RecyclingTrackerView) {
+class RecyclingTrackerPresenter(view: BaseView) : BasePresenter(view) {
 
     var recyclingTracker = RecyclingTrackerModel()
-    var app: MainApp = view.application as MainApp
     var edit = false
-    
-    private lateinit var imageIntentLauncher : ActivityResultLauncher<PickVisualMediaRequest>
-    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
-    
+
     init {
         if (view.intent.hasExtra("recycling_tracker_edit")) {
             edit = true
             recyclingTracker = view.intent.extras?.getParcelable("recycling_tracker_edit")!!
             view.showRecyclingTracker(recyclingTracker)
         }
-        registerImagePickerCallback()
-        registerMapCallback()
     }
 
     fun doAddOrSave(title: String, description: String, company: String, date: String) {
@@ -34,31 +25,30 @@ class RecyclingTrackerPresenter(val view: RecyclingTrackerView) {
         recyclingTracker.description = description
         recyclingTracker.company = company
         recyclingTracker.date = date
-        
         if (edit) {
             app.recyclingTrackers.update(recyclingTracker.copy())
         } else {
             app.recyclingTrackers.create(recyclingTracker.copy())
         }
-        view.setResult(Activity.RESULT_OK)
-        view.finish()
+        view?.finish()
     }
 
     fun doCancel() {
-        view.finish()
+        view?.finish()
     }
 
     fun doDelete() {
         app.recyclingTrackers.delete(recyclingTracker)
-        view.setResult(99)
-        view.finish()
+        view?.finish()
     }
 
     fun doSelectImage() {
-        val request = PickVisualMediaRequest.Builder()
-            .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly)
-            .build()
-        imageIntentLauncher.launch(request)
+        // Lab style usually uses a simpler intent, but keeping your logic within the MVP structure
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            addCategory(Intent.CATEGORY_OPENABLE)
+            type = "image/*"
+        }
+        view?.startActivityForResult(intent, 1)
     }
 
     fun doSetLocation() {
@@ -68,28 +58,24 @@ class RecyclingTrackerPresenter(val view: RecyclingTrackerView) {
             location.lng = recyclingTracker.lng
             location.zoom = recyclingTracker.zoom
         }
-        val launcherIntent = Intent(view, EditLocationView::class.java)
-            .putExtra("location", location)
-        mapIntentLauncher.launch(launcherIntent)
+        view?.navigateWithView(VIEW.LOCATION, 2, "location", location)
     }
 
-    private fun registerImagePickerCallback() {
-        imageIntentLauncher = view.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                view.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                recyclingTracker.image = uri
-                view.updateImage(uri)
+    override fun doActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            1 -> {
+                if (data != null) {
+                    recyclingTracker.image = data.data!!
+                    view?.updateImage(recyclingTracker.image)
+                }
             }
-        }
-    }
-
-    private fun registerMapCallback() {
-        mapIntentLauncher = view.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK && result.data != null) {
-                val location = result.data!!.extras?.getParcelable<Location>("location")!!
-                recyclingTracker.lat = location.lat
-                recyclingTracker.lng = location.lng
-                recyclingTracker.zoom = location.zoom
+            2 -> {
+                if (data != null) {
+                    val location = data.extras?.getParcelable<Location>("location")!!
+                    recyclingTracker.lat = location.lat
+                    recyclingTracker.lng = location.lng
+                    recyclingTracker.zoom = location.zoom
+                }
             }
         }
     }

@@ -71,4 +71,11 @@
     <string name="account">Account</string>
     <string name="logout">Logout</string>
     <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="register_prompt">Don\'t have an account? Register here</string>
+    <string name="error_empty_credentials">Please enter email and password</string>
+    <string name="error_invalid_credentials">Invalid Credentials</string>
+    <string name="register_empty_credentials">Please enter email and password to register</string>
+    <string name="register_success">Registration successful for %1$s! You can now login.</string>
 </resources>

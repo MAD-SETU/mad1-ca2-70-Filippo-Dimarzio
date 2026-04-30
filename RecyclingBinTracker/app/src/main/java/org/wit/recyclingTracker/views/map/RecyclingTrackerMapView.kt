@@ -3,41 +3,42 @@ package org.wit.recyclingTracker.views.map
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import com.squareup.picasso.Picasso
 import org.wit.recyclingTracker.R
 import org.wit.recyclingTracker.databinding.ActivityRecyclingTrackerMapsBinding
 import org.wit.recyclingTracker.databinding.ContentRecyclingTrackerMapsBinding
-import org.wit.recyclingTracker.main.MainApp
 import org.wit.recyclingTracker.models.RecyclingTrackerModel
+import org.wit.recyclingTracker.views.BaseView
 
-class RecyclingTrackerMapView : AppCompatActivity() , GoogleMap.OnMarkerClickListener{
+class RecyclingTrackerMapView : BaseView() , GoogleMap.OnMarkerClickListener{
 
     private lateinit var binding: ActivityRecyclingTrackerMapsBinding
     private lateinit var contentBinding: ContentRecyclingTrackerMapsBinding
-    lateinit var app: MainApp
     lateinit var presenter: RecyclingTrackerMapPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = application as MainApp
         binding = ActivityRecyclingTrackerMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        initToolbar(binding.toolbar, true)
 
         presenter = RecyclingTrackerMapPresenter(this)
+        basePresenter = presenter
 
         contentBinding = binding.contentMaps
 
         contentBinding.mapView.onCreate(savedInstanceState)
         contentBinding.mapView.getMapAsync{
+            it.setOnMarkerClickListener(this)
             presenter.doPopulateMap(it)
         }
     }
-    fun showRecyclingTracker(recyclingTracker: RecyclingTrackerModel) {
+
+    override fun showRecyclingTracker(recyclingTracker: RecyclingTrackerModel) {
+        contentBinding.cardView.visibility = android.view.View.VISIBLE
         contentBinding.currentTitle.text = recyclingTracker.title
         contentBinding.currentDescription.text = recyclingTracker.description
         contentBinding.currentCompany.text = recyclingTracker.company
@@ -67,11 +68,6 @@ class RecyclingTrackerMapView : AppCompatActivity() , GoogleMap.OnMarkerClickLis
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
-        return true
     }
 
     override fun onDestroy() {

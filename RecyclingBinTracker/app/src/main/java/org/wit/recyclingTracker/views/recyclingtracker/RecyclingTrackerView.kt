@@ -4,15 +4,14 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import org.wit.recyclingTracker.R
 import org.wit.recyclingTracker.databinding.ActivityRecyclingTrackerBinding
 import org.wit.recyclingTracker.models.RecyclingTrackerModel
-import timber.log.Timber
+import org.wit.recyclingTracker.views.BaseView
 
-class RecyclingTrackerView : AppCompatActivity() {
+class RecyclingTrackerView : BaseView() {
 
     private lateinit var binding: ActivityRecyclingTrackerBinding
     private lateinit var presenter: RecyclingTrackerPresenter
@@ -23,11 +22,16 @@ class RecyclingTrackerView : AppCompatActivity() {
 
         binding = ActivityRecyclingTrackerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
-        binding.toolbarAdd.title = title
-        setSupportActionBar(binding.toolbarAdd)
 
         presenter = RecyclingTrackerPresenter(this)
+        basePresenter = presenter
+
+        if (presenter.edit) {
+            binding.toolbarAdd.title = getString(R.string.save_recyclingTracker)
+        } else {
+            binding.toolbarAdd.title = getString(R.string.button_addRecyclingTracker)
+        }
+        initToolbar(binding.toolbarAdd, true)
 
         if (!presenter.edit) {
             Picasso.get().load(R.drawable.recycling_logo).into(binding.recyclingTrackerImage)
@@ -70,7 +74,7 @@ class RecyclingTrackerView : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun showRecyclingTracker(recyclingTracker: RecyclingTrackerModel) {
+    override fun showRecyclingTracker(recyclingTracker: RecyclingTrackerModel) {
         binding.recyclingTrackerTitle.setText(recyclingTracker.title)
         binding.description.setText(recyclingTracker.description)
         binding.company.setText(recyclingTracker.company)
@@ -82,7 +86,14 @@ class RecyclingTrackerView : AppCompatActivity() {
         binding.btnAdd.setText(R.string.save_recyclingTracker)
     }
 
-    fun updateImage(image: Uri) {
+    override fun updateImage(image: Uri) {
         Picasso.get().load(image).into(binding.recyclingTrackerImage)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (data != null) {
+            presenter.doActivityResult(requestCode, resultCode, data)
+        }
     }
 }
