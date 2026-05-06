@@ -1,6 +1,8 @@
 package org.wit.recyclingTracker.views.editLocation
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.Marker
@@ -22,7 +24,9 @@ class EditLocationView : BaseView(), OnMapReadyCallback,
         
         presenter = EditLocationPresenter(this)
         basePresenter = presenter
-        
+
+        initToolbar(binding.toolbar, true)
+
         binding.mapView.onCreate(savedInstanceState)
         binding.mapView.getMapAsync(this)
     }
@@ -72,5 +76,19 @@ class EditLocationView : BaseView(), OnMapReadyCallback,
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding.mapView.onSaveInstanceState(outState)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(org.wit.recyclingTracker.R.menu.menu_edit_location, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            org.wit.recyclingTracker.R.id.item_save -> {
+                presenter.doSave()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

@@ -96,8 +96,7 @@ class RecyclingTrackerListView : BaseView(), RecyclingTrackerListener, Navigatio
     }
 
     fun onRefresh() {
-        binding.recyclerView.adapter?.
-        notifyItemRangeChanged(0,presenter.getRecyclingTrackers().size)
+        binding.recyclerView.adapter?.notifyDataSetChanged()
     }
 
     fun onDelete(position : Int) {

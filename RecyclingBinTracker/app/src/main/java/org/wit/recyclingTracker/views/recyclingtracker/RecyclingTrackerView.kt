@@ -79,9 +79,11 @@ class RecyclingTrackerView : BaseView() {
         binding.description.setText(recyclingTracker.description)
         binding.company.setText(recyclingTracker.company)
         binding.dateAdded.setText(recyclingTracker.date)
-        
+
         if (recyclingTracker.image != Uri.EMPTY) {
             Picasso.get().load(recyclingTracker.image).into(binding.recyclingTrackerImage)
+        } else {
+            Picasso.get().load(R.drawable.recycling_logo).into(binding.recyclingTrackerImage)
         }
         binding.btnAdd.setText(R.string.save_recyclingTracker)
     }

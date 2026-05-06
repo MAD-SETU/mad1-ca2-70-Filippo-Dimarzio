@@ -1,5 +1,6 @@
 package org.wit.recyclingTracker.views.recyclingtracker
 
+import android.app.Activity
 import android.content.Intent
 import org.wit.recyclingTracker.models.Location
 import org.wit.recyclingTracker.models.RecyclingTrackerModel
@@ -30,6 +31,7 @@ class RecyclingTrackerPresenter(view: BaseView) : BasePresenter(view) {
         } else {
             app.recyclingTrackers.create(recyclingTracker.copy())
         }
+        view?.setResult(Activity.RESULT_OK)
         view?.finish()
     }
 
@@ -39,6 +41,7 @@ class RecyclingTrackerPresenter(view: BaseView) : BasePresenter(view) {
 
     fun doDelete() {
         app.recyclingTrackers.delete(recyclingTracker)
+        view?.setResult(Activity.RESULT_OK)
         view?.finish()
     }
 
@@ -65,7 +68,12 @@ class RecyclingTrackerPresenter(view: BaseView) : BasePresenter(view) {
         when (requestCode) {
             1 -> {
                 if (data != null) {
-                    recyclingTracker.image = data.data!!
+                    val uri = data.data!!
+                    view?.contentResolver?.takePersistableUriPermission(
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                    recyclingTracker.image = uri
                     view?.updateImage(recyclingTracker.image)
                 }
             }
@@ -75,6 +83,7 @@ class RecyclingTrackerPresenter(view: BaseView) : BasePresenter(view) {
                     recyclingTracker.lat = location.lat
                     recyclingTracker.lng = location.lng
                     recyclingTracker.zoom = location.zoom
+                    android.widget.Toast.makeText(view, "Location Updated!", android.widget.Toast.LENGTH_SHORT).show()
                 }
             }
         }
