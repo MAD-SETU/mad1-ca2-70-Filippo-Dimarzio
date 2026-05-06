@@ -9,51 +9,23 @@ import org.wit.recyclingTracker.models.RecyclingTrackerModel
 import org.wit.recyclingTracker.views.map.RecyclingTrackerMapView
 import org.wit.recyclingTracker.views.recyclingtracker.RecyclingTrackerView
 
-class RecyclingTrackerListPresenter(val view: RecyclingTrackerListView) {
+import org.wit.recyclingTracker.views.BasePresenter
+import org.wit.recyclingTracker.views.BaseView
+import org.wit.recyclingTracker.views.VIEW
 
-    var app: MainApp
-    private lateinit var refreshIntentLauncher : ActivityResultLauncher<Intent>
-    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
-    private var position: Int = 0
-
-    init {
-        app = view.application as MainApp
-        registerMapCallback()
-        registerRefreshCallback()
-    }
+class RecyclingTrackerListPresenter(view: BaseView) : BasePresenter(view) {
 
     fun getRecyclingTrackers() = app.recyclingTrackers.findAll()
 
     fun doAddRecyclingTracker() {
-        val launcherIntent = Intent(view, RecyclingTrackerView::class.java)
-        refreshIntentLauncher.launch(launcherIntent)
+        view?.navigateWithView(VIEW.RECYCLINGTRACKER, 0)
     }
 
     fun doEditRecyclingTracker(recyclingTracker: RecyclingTrackerModel, pos: Int) {
-        val launcherIntent = Intent(view, RecyclingTrackerView::class.java)
-        launcherIntent.putExtra("recycling_tracker_edit", recyclingTracker)
-        position = pos
-        refreshIntentLauncher.launch(launcherIntent)
+        view?.navigateWithView(VIEW.RECYCLINGTRACKER, 0, "recycling_tracker_edit", recyclingTracker)
     }
 
     fun doShowRecyclingTrackersMap() {
-        val launcherIntent = Intent(view, RecyclingTrackerMapView::class.java)
-        mapIntentLauncher.launch(launcherIntent)
-    }
-
-    private fun registerRefreshCallback() {
-        refreshIntentLauncher =
-            view.registerForActivityResult(
-                ActivityResultContracts.StartActivityForResult()
-            ) {
-                if (it.resultCode == Activity.RESULT_OK) view.onRefresh()
-                else
-                    if (it.resultCode == 99) view.onDelete(position)
-            }
-    }
-    private fun registerMapCallback() {
-        mapIntentLauncher =
-            view.registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            {  }
+        view?.navigateWithView(VIEW.MAP, 0)
     }
 }

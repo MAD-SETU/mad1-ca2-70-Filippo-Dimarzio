@@ -15,21 +15,23 @@ import org.wit.recyclingTracker.main.MainApp
 import org.wit.recyclingTracker.models.RecyclingTrackerModel
 import org.wit.recyclingTracker.views.login.LoginView
 
-class RecyclingTrackerListView : AppCompatActivity(), RecyclingTrackerListener, NavigationView.OnNavigationItemSelectedListener {
+import org.wit.recyclingTracker.views.BaseView
+import org.wit.recyclingTracker.views.VIEW
 
-    lateinit var app: MainApp
+class RecyclingTrackerListView : BaseView(), RecyclingTrackerListener, NavigationView.OnNavigationItemSelectedListener {
+
     private lateinit var binding: ActivityRecyclingTrackerListBinding
     lateinit var presenter: RecyclingTrackerListPresenter
-    private var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRecyclingTrackerListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.toolbar.title = title
-        setSupportActionBar(binding.toolbar)
+
+        initToolbar(binding.toolbar, false)
+
         presenter = RecyclingTrackerListPresenter(this)
-        app = application as MainApp
+        basePresenter = presenter
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
@@ -46,7 +48,7 @@ class RecyclingTrackerListView : AppCompatActivity(), RecyclingTrackerListener, 
             R.id.nav_add -> { presenter.doAddRecyclingTracker() }
             R.id.nav_map -> { presenter.doShowRecyclingTrackersMap() }
             R.id.nav_logout -> {
-                startActivity(Intent(this, LoginView::class.java))
+                navigateWithView(VIEW.LOGIN, 0)
                 finish()
             }
         }
@@ -76,8 +78,16 @@ class RecyclingTrackerListView : AppCompatActivity(), RecyclingTrackerListener, 
     }
 
     override fun onRecyclingTrackerClick(recycling: RecyclingTrackerModel, position: Int) {
-        this.position = position
-        presenter.doEditRecyclingTracker(recycling, this.position)
+        presenter.doEditRecyclingTracker(recycling, position)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == RESULT_OK) onRefresh()
+        else if (resultCode == 99) {
+            // position is handled in the presenter in the lab, but here we just refresh
+            onRefresh()
+        }
     }
 
     private fun loadRecyclingTrackers() {
@@ -86,8 +96,7 @@ class RecyclingTrackerListView : AppCompatActivity(), RecyclingTrackerListener, 
     }
 
     fun onRefresh() {
-        binding.recyclerView.adapter?.
-        notifyItemRangeChanged(0,presenter.getRecyclingTrackers().size)
+        binding.recyclerView.adapter?.notifyDataSetChanged()
     }
 
     fun onDelete(position : Int) {

@@ -5,15 +5,13 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import org.wit.recyclingTracker.main.MainApp
+import org.wit.recyclingTracker.views.BasePresenter
+import org.wit.recyclingTracker.views.BaseView
 
-class RecyclingTrackerMapPresenter(val view: RecyclingTrackerMapView) {
-
-    var app: MainApp = view.application as MainApp
+class RecyclingTrackerMapPresenter(view: BaseView) : BasePresenter(view) {
 
     fun doPopulateMap(map: GoogleMap) {
         map.uiSettings.isZoomControlsEnabled = true
-        map.setOnMarkerClickListener(view)
         val list = app.recyclingTrackers.findAll()
         list.forEach {
             val loc = LatLng(it.lat, it.lng)
@@ -33,12 +31,12 @@ class RecyclingTrackerMapPresenter(val view: RecyclingTrackerMapView) {
         if (tag != null) {
             val recyclingTracker = app.recyclingTrackers.findById(tag)
             if (recyclingTracker != null) {
-                view.showRecyclingTracker(recyclingTracker)
+                view?.showRecyclingTracker(recyclingTracker)
             }
         }
     }
 
     fun doShowList() {
-        view.finish()
+        view?.finish()
     }
 }

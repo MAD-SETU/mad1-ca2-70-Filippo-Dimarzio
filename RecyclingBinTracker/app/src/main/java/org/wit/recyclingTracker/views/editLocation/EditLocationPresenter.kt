@@ -8,27 +8,26 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import org.wit.recyclingTracker.models.Location
+import org.wit.recyclingTracker.views.BasePresenter
+import org.wit.recyclingTracker.views.BaseView
 
-class EditLocationPresenter (val view: EditLocationView) {
+class EditLocationPresenter(view: BaseView) : BasePresenter(view) {
 
     var location = Location()
 
     init {
-
         location = view.intent.extras?.getParcelable("location")!!
     }
 
-    fun initMap(map: GoogleMap) {
+    fun doInitMap(map: GoogleMap) {
         val loc = LatLng(location.lat, location.lng)
         val options = MarkerOptions()
-            .title("Placemark")
+            .title("Recycling Tracker")
             .snippet("GPS : $loc")
             .draggable(true)
             .position(loc)
         map.addMarker(options)
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, location.zoom))
-        map.setOnMarkerDragListener(view)
-        map.setOnMarkerClickListener(view)
     }
 
     fun doUpdateLocation(lat: Double, lng: Double, zoom: Float) {
@@ -37,11 +36,11 @@ class EditLocationPresenter (val view: EditLocationView) {
         location.zoom = zoom
     }
 
-    fun doOnBackPressed() {
+    fun doSave() {
         val resultIntent = Intent()
         resultIntent.putExtra("location", location)
-        view.setResult(Activity.RESULT_OK, resultIntent)
-        view.finish()
+        view?.setResult(Activity.RESULT_OK, resultIntent)
+        view?.finish()
     }
 
     fun doUpdateMarker(marker: Marker) {

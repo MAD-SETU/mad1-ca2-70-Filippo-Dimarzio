@@ -89,6 +89,22 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imageBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+                <ImageView
+                    android:id="@+id/recyclingTrackerImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/recycling_logo" />
+            </androidx.cardview.widget.CardView>
+
             <Button
                 android:id="@+id/chooseImage"
                 android:layout_width="match_parent"
@@ -109,14 +125,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:text="@string/button_addRecyclingTracker" />
-
-            <ImageView
-                android:id="@+id/recyclingTrackerImage"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="8dp"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/recycling_logo" />
 
         </LinearLayout>
     </ScrollView>

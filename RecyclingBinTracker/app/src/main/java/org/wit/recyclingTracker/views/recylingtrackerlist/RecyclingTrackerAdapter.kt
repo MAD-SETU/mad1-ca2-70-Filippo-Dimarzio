@@ -37,7 +37,11 @@ class RecyclingTrackerAdapter(private var recyclingTrackers: List<RecyclingTrack
             binding.description.text = recyclingTracker.description
             binding.company.text = recyclingTracker.company
             binding.dateAdded.text = recyclingTracker.date
-            Picasso.get().load(recyclingTracker.image).resize(200,200).into(binding.recyclingTrackerImage)
+            if (recyclingTracker.image != android.net.Uri.EMPTY) {
+                Picasso.get().load(recyclingTracker.image).resize(200, 200).into(binding.recyclingTrackerImage)
+            } else {
+                Picasso.get().load(org.wit.recyclingTracker.R.drawable.recycling_logo).resize(200, 200).into(binding.recyclingTrackerImage)
+            }
             binding.root.setOnClickListener { listener.onRecyclingTrackerClick(recyclingTracker, adapterPosition) }
         }
     }
